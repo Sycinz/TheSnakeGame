@@ -5,7 +5,7 @@ function snakePosRefresh() {
 }
 
 function canvasDrawing(x, y) {
-    const canvas = docunent.querySelector('#game')
+    const canvas = document.querySelector('#game')
     let ctx = canvas.getContext("2d")
 
     ctx.moveTo(map[x][y])
