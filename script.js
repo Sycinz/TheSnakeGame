@@ -1,39 +1,63 @@
-const map = [
-    [0,1,2,3,4,5,6,7,8,9],
-    [0,1,2,3,4,5,6,7,8,9]
-]
+var canvas;
+var blockSize = 25;
 
-var canvas = document.querySelector('canvas')
-
-let snake = {
-    size: 80, // in pixels for now
-    color: "green"
+var board = {
+    x: 20,
+    y: 20
+}
+var snake = {
+    posX: 10, // range from 0 - 19
+    posY: 10, // range from 0 - 19
+    velocityX: 0,
+    velocityY: 0,
+    color: "green",
+    length: 1,
 }
 
-function snakePosRefresh() {}
+window.onload = function gameLoop() {
+    canvas = document.querySelector('canvas')
 
-function canvasDrawing(x, y) {
-    
+    // setting 
+    canvas.width = board.x * blockSize
+    canvas.height = board.y * blockSize
+
+    setInterval(update, 1000/10) // calling update() every 100ms 
+}
+
+// main function that updates the whole game and creates object
+function update() {
     var ctx = canvas.getContext("2d")
 
+    // setting board background
+    ctx.fillStyle = "#252525"
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    // checks if player inputs any key to change direction of a snake
+    changeDirection()
+
+    // Snake movement check
+    snake.posX += snake.velocityX
+    snake.posY += snake.velocityY
+
+    // Snake create model (same head for now)
     ctx.fillStyle = snake.color
-    ctx.fillRect(map[0][x] * snake.size, map[1][y] * snake.size, snake.size, snake.size)
-
-    snake.posX = x
-    snake.posY = y
-
-    // return snake.posX, snake.posY
+    ctx.fillRect(snake.posX * blockSize, snake.posY * blockSize, blockSize * snake.length, blockSize * snake.length)
 }
 
 function changeDirection() {
     document.addEventListener('keyup', (event) => {
-        document.innerHTML += (event.key)
+        if(event.code == "ArrowUp") {
+            snake.velocityX = 0;
+            snake.velocityY = -1;
+        } else if(event.code == "ArrowRight") {
+            snake.velocityX = 1;
+            snake.velocityY = 0;
+        } else if(event.code == "ArrowDown") {
+            snake.velocityX = 0;
+            snake.velocityY = 1;
+        } else if(event.code == "ArrowLeft") {
+            snake.velocityX = -1;
+            snake.velocityY = 0;
+        } 
     })
-}
-
-window.onload = function gameLoop() {
-    // for(let i; i <= 10; i++) {
-    //     canvasDrawing(Math.floor(Math.random() * 9), Math.floor(Math.random() * 9))
-    // }
-   canvasDrawing(Math.floor(Math.random() * map[0].length), Math.floor(Math.random() * map[0].length))
 }
